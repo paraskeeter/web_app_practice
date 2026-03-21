@@ -14,12 +14,22 @@ class Dashboard:
                 ('Log', '/logging', 'article'),
             ]
 
+            # for label, route, icon in nav_items:
+            #     with ui.item(on_click=lambda r=route: ui.navigate.to(r)).classes(
+            #         'bg-gray-700' if current_page == route else ''
+            #     ):
+            #         ui.icon(icon)
+            #         ui.label(label)
             for label, route, icon in nav_items:
-                with ui.item(on_click=lambda r=route: ui.navigate.to(r)).classes(
-                    'bg-gray-700' if current_page == route else ''
-                ):
-                    ui.icon(icon)
-                    ui.label(label)
+                is_active = current_page == route
+                # ui.link handles navigation natively in the browser — no Python roundtrip
+                with ui.link(target=route).classes('no-underline w-full'):
+                    with ui.row().classes(
+                        f'items-center gap-2 px-4 py-2 rounded cursor-pointer '
+                        f'{"bg-gray-700" if is_active else "hover:bg-gray-600"}'
+                    ):
+                        ui.icon(icon).classes('text-white')
+                        ui.label(label).classes('text-white')
 
         with ui.header().classes('bg-gray-900 text-white justify-between'):
             ui.label(f'Welcome, {app.storage.user.get("username", "User")}')
